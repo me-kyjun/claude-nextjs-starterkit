@@ -45,8 +45,7 @@
   "theme": {
     "toggle": "Toggle theme",
     "light": "Light mode",
-    "dark": "Dark mode",
-    "system": "System"
+    "dark": "Dark mode"
   },
   "footer": {
     "rights": "All rights reserved"

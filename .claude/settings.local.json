@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:ui.shadcn.com)",
+      "WebSearch",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:dev.to)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.shadcnblocks.com)",
+      "WebFetch(domain:www.luisball.com)",
+      "WebFetch(domain:next-auth.js.org)",
+      "WebFetch(domain:next-intl.dev)",
+      "WebFetch(domain:authjs.dev)",
+      "Bash(cd D:/workspace/claude-nextjs-starterkit/temp && npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack 2>&1)",
+      "Bash(cd D:/workspace/claude-nextjs-starterkit/temp && echo \"N\" | npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" 2>&1)",
+      "Bash(cd D:/workspace/claude-nextjs-starterkit/temp && npm install next-auth@beta next-intl next-themes lucide-react class-variance-authority clsx tailwind-merge @radix-ui/react-dropdown-menu @radix-ui/react-label @radix-ui/react-slot postcss 2>&1)",
+      "Bash(cd D:/workspace/claude-nextjs-starterkit && git add \\\\\n  next.config.ts \\\\\n  package.json \\\\\n  package-lock.json \\\\\n  tsconfig.json \\\\\n  src/app/globals.css \\\\\n  src/app/layout.tsx \\\\\n  src/app/page.tsx \\\\\n  auth.ts \\\\\n  components.json \\\\\n  i18n/ \\\\\n  src/app/\\\\[locale\\\\]/ \\\\\n  src/app/api/ \\\\\n  src/components/ \\\\\n  src/lib/ \\\\\n  src/messages/ \\\\\n  src/proxy.ts \\\\\n  .env.example 2>&1)",
+      "Bash(echo 추가 완료:*)",
+      "Bash(cd:*)"
+    ]
+  }
+}
