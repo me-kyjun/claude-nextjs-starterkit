@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 
 /**
  * 다크/라이트 테마 토글 버튼 컴포넌트
+ * 라이트 모드: 해 아이콘 표시, 다크 모드: 달 아이콘 표시
  * 클릭 시 현재 테마와 반대 테마로 즉시 전환
  */
 export function ThemeToggle() {
@@ -19,8 +20,10 @@ export function ThemeToggle() {
 
   return (
     <Button variant="outline" size="icon" onClick={toggleTheme} aria-label={t("toggle")}>
-      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      {/* 라이트 모드일 때 보임 (클릭하면 다크 모드로 변경 가능) */}
+      <Sun className="h-[1.2rem] w-[1.2rem] scale-100 transition-all dark:scale-0" />
+      {/* 다크 모드일 때 보임 (클릭하면 라이트 모드로 변경 가능) */}
+      <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 transition-all dark:scale-100" />
       <span className="sr-only">{t("toggle")}</span>
     </Button>
   );
