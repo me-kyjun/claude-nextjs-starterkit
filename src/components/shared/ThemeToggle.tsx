@@ -20,10 +20,10 @@ export function ThemeToggle() {
 
   return (
     <Button variant="outline" size="icon" onClick={toggleTheme} aria-label={t("toggle")}>
-      {/* 라이트 모드일 때 보임 (클릭하면 다크 모드로 변경 가능) */}
-      <Sun className="h-[1.2rem] w-[1.2rem] scale-100 transition-all dark:scale-0" />
-      {/* 다크 모드일 때 보임 (클릭하면 라이트 모드로 변경 가능) */}
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 transition-all dark:scale-100" />
+      {/* 라이트 모드일 때 보임 */}
+      <Sun className="h-[1.2rem] w-[1.2rem] block dark:hidden" />
+      {/* 다크 모드일 때 보임 */}
+      <Moon className="h-[1.2rem] w-[1.2rem] hidden dark:block" />
       <span className="sr-only">{t("toggle")}</span>
     </Button>
   );
