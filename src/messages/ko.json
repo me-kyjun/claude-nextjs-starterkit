@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "home": "홈",
+    "about": "소개",
+    "login": "로그인",
+    "register": "회원가입",
+    "logout": "로그아웃"
+  },
+  "home": {
+    "title": "Next.js 스타터킷에 오신 것을 환영합니다",
+    "description": "Next.js 15, TypeScript, TailwindCSS, shadcn/ui로 구축된 현대적인 웹 애플리케이션 스타터킷입니다.",
+    "getStarted": "시작하기",
+    "learnMore": "더 알아보기"
+  },
+  "about": {
+    "title": "소개",
+    "description": "이 스타터킷은 빠른 웹 개발 시작을 위해 설계되었습니다.",
+    "features": "주요 기능",
+    "featureList": {
+      "auth": "NextAuth v5 인증",
+      "i18n": "next-intl 다국어 지원 (한국어/영어)",
+      "theme": "next-themes 다크/라이트 테마",
+      "ui": "shadcn/ui 컴포넌트"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "로그인",
+      "email": "이메일",
+      "password": "비밀번호",
+      "submit": "로그인",
+      "noAccount": "계정이 없으신가요?",
+      "register": "회원가입"
+    },
+    "register": {
+      "title": "회원가입",
+      "name": "이름",
+      "email": "이메일",
+      "password": "비밀번호",
+      "submit": "회원가입",
+      "hasAccount": "이미 계정이 있으신가요?",
+      "login": "로그인"
+    }
+  },
+  "theme": {
+    "toggle": "테마 전환",
+    "light": "라이트 모드",
+    "dark": "다크 모드",
+    "system": "시스템 설정"
+  },
+  "footer": {
+    "rights": "모든 권리 보유"
+  }
+}

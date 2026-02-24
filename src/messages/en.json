@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "home": {
+    "title": "Welcome to Next.js Starter Kit",
+    "description": "A modern web application starter kit built with Next.js 15, TypeScript, TailwindCSS, and shadcn/ui.",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "about": {
+    "title": "About",
+    "description": "This starter kit is designed for rapid web development.",
+    "features": "Key Features",
+    "featureList": {
+      "auth": "NextAuth v5 Authentication",
+      "i18n": "next-intl i18n support (Korean/English)",
+      "theme": "next-themes Dark/Light theme",
+      "ui": "shadcn/ui Components"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Login",
+      "noAccount": "Don't have an account?",
+      "register": "Register"
+    },
+    "register": {
+      "title": "Register",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Register",
+      "hasAccount": "Already have an account?",
+      "login": "Login"
+    }
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light mode",
+    "dark": "Dark mode",
+    "system": "System"
+  },
+  "footer": {
+    "rights": "All rights reserved"
+  }
+}
