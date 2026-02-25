@@ -1,6 +1,22 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
+const SUPPORTED_LOCALES = ["ko", "en"];
+
+/**
+ * URL에서 로케일 세그먼트를 추출
+ * 경로의 첫 번째 세그먼트가 지원 로케일이면 해당 값, 아니면 기본값 "ko" 반환
+ */
+function getLocaleFromUrl(url: string): string {
+  try {
+    const { pathname } = new URL(url);
+    const firstSegment = pathname.split("/")[1];
+    return SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "ko";
+  } catch {
+    return "ko";
+  }
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -36,7 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   pages: {
-    signIn: "/ko/login",
+    signIn: "/login",
   },
   session: {
     strategy: "jwt",
@@ -55,6 +71,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id as string;
       }
       return session;
+    },
+    /** callbackUrl의 로케일을 파싱하여 동적으로 로그인 페이지 리다이렉트 */
+    async redirect({ url, baseUrl }) {
+      const absoluteUrl = url.startsWith("http") ? url : `${baseUrl}${url}`;
+      const locale = getLocaleFromUrl(absoluteUrl);
+
+      if (
+        url.startsWith(baseUrl) &&
+        !url.includes("/login") &&
+        !url.includes("/register")
+      ) {
+        return url;
+      }
+      return `${baseUrl}/${locale}/login`;
     },
   },
 });
