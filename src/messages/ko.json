@@ -7,10 +7,50 @@
     "logout": "로그아웃"
   },
   "home": {
-    "title": "Next.js 스타터킷에 오신 것을 환영합니다",
-    "description": "Next.js 15, TypeScript, TailwindCSS, shadcn/ui로 구축된 현대적인 웹 애플리케이션 스타터킷입니다.",
+    "title": "모던 웹 개발을 위한\n완벽한 스타터킷",
+    "description": "Next.js 15, TypeScript, TailwindCSS, shadcn/ui로 구축된 웹 애플리케이션입니다. 빠른 개발과 확장성을 위해 설계되었습니다.",
     "getStarted": "시작하기",
-    "learnMore": "더 알아보기"
+    "learnMore": "더 알아보기",
+    "keyFeatures": "주요 기능",
+    "keyFeaturesDesc": "프로덕션 준비가 된 기능이 있음은 물론 개발자 경험도 함께 고려했습니다.",
+    "features": {
+      "fastPerformance": {
+        "title": "빠른 성능",
+        "description": "Next.js 15의 최적화된 빌드 속도와 더 빠른 로딩 환경을 제공합니다."
+      },
+      "typeSecure": {
+        "title": "타입 안정성",
+        "description": "TypeScript로 런타임 에러를 방지하고 개발 생산성을 높입니다."
+      },
+      "beautifulDesign": {
+        "title": "아름다운 디자인",
+        "description": "shadcn/ui와 TailwindCSS로 구성된 모던하고 일관된 디자인입니다."
+      },
+      "developmentExperience": {
+        "title": "개발자 경험",
+        "description": "최고의 DX를 위해 ESLint, Prettier, Husky 등 개발 도구가 미리 설정되어있습니다."
+      },
+      "responsiveDesign": {
+        "title": "반응형 디자인",
+        "description": "useHooks-ts 플러그인 활용하여 모든 디바이스에 최적화된 디자인입니다."
+      },
+      "seoOptimized": {
+        "title": "SEO 최적화",
+        "description": "검색 엔진 최적화 위해 메타데이터 관리가 기본으로 설정되어 있습니다."
+      },
+      "extensibleFeature": {
+        "title": "확장 가능",
+        "description": "모듈식 구조로 설계되어 쉽게 기능을 추가하고 커스터마이징할 수 있습니다."
+      },
+      "professionalSupport": {
+        "title": "프로덕션 준비",
+        "description": "실제 서비스 운영에 필요한 모든 기본 설정과 보안이 준비되어 있습니다."
+      },
+      "stateManagement": {
+        "title": "상태 관리",
+        "description": "NextAuth로 인증, next-intl로 다국어, next-themes로 테마 관리가 통합되어 있습니다."
+      }
+    }
   },
   "about": {
     "title": "소개",

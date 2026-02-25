@@ -7,10 +7,50 @@
     "logout": "Logout"
   },
   "home": {
-    "title": "Welcome to Next.js Starter Kit",
-    "description": "A modern web application starter kit built with Next.js 15, TypeScript, TailwindCSS, and shadcn/ui.",
+    "title": "Complete Starter Kit for\nModern Web Development",
+    "description": "A web application built with Next.js 15, TypeScript, TailwindCSS, and shadcn/ui. Designed for rapid development and scalability.",
     "getStarted": "Get Started",
-    "learnMore": "Learn More"
+    "learnMore": "Learn More",
+    "keyFeatures": "Key Features",
+    "keyFeaturesDesc": "Production-ready features combined with exceptional developer experience.",
+    "features": {
+      "fastPerformance": {
+        "title": "Fast Performance",
+        "description": "Next.js 15's optimized build and faster loading experience for better user performance."
+      },
+      "typeSecure": {
+        "title": "Type Security",
+        "description": "Prevent runtime errors with TypeScript and improve development productivity."
+      },
+      "beautifulDesign": {
+        "title": "Beautiful Design",
+        "description": "Modern and consistent design with shadcn/ui and TailwindCSS components."
+      },
+      "developmentExperience": {
+        "title": "Development Experience",
+        "description": "Best DX with ESLint, Prettier, Husky and other dev tools pre-configured."
+      },
+      "responsiveDesign": {
+        "title": "Responsive Design",
+        "description": "Fully responsive design optimized for all devices using modern CSS."
+      },
+      "seoOptimized": {
+        "title": "SEO Optimized",
+        "description": "Built-in metadata management and SEO optimization for better search visibility."
+      },
+      "extensibleFeature": {
+        "title": "Extensible",
+        "description": "Modular architecture designed for easy feature addition and customization."
+      },
+      "professionalSupport": {
+        "title": "Production Ready",
+        "description": "All essential configurations and security measures are pre-configured for production."
+      },
+      "stateManagement": {
+        "title": "State Management",
+        "description": "Integrated authentication, i18n support, and theme management out of the box."
+      }
+    }
   },
   "about": {
     "title": "About",
