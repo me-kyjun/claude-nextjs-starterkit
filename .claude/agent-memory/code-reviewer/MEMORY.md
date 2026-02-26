@@ -32,5 +32,13 @@
 - next-intl 4.8.3, next-themes 0.4.6, NextAuth 5.0.0-beta.30
 - TailwindCSS v4 (postcss 플러그인 방식)
 
+## Claude Code Hooks (bash 스크립트) 반복 패턴
+- **.env.local IFS='=' 파싱 버그**: 값에 `=` 포함 시 소실 — `read -r key rest` 방식 권장
+- **`export "$key=$value"` 보안**: `export "${key}=${value}"` 방식이 더 안전
+- **SubagentStop에서 stop_hook_active 체크**: Stop 이벤트 전용 필드이므로 SubagentStop에서는 실질적 효과 없음 (방어적 유지 가능, 주석 명시 필요)
+- **Python 인라인 삼항 연산자 우선순위**: `'prefix' + var if cond else 'other'` 패턴은 `+` 우선순위로 prefix가 else 브랜치에서 누락됨 — 변수로 분리 필요
+- **에러 출력 `/dev/null` 버리기**: 디버깅을 위해 stderr(`>&2`) 또는 로그 파일 활용 권장
+- **settings.json timeout vs Python urllib timeout 불일치**: settings 15s, urlopen 10s — 명시적 문서화 필요
+
 ## 상세 이슈 문서
 - [첫 번째 전체 리뷰 이슈 목록](./review-2026-02-25.md)
