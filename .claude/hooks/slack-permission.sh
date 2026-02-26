@@ -1,76 +1,74 @@
 #!/usr/bin/env bash
 # Notification 이벤트 (permission_prompt) → Slack 권한 요청 알림
 
+# .env.local에서 직접 환경변수 읽기
+ENV_FILE="$(dirname "$0")/../.env.local"
+if [ -f "$ENV_FILE" ]; then
+  while IFS='=' read -r key rest; do
+    [[ "$key" =~ ^[[:space:]]*# ]] && continue
+    [[ -z "$key" ]] && continue
+    value=$(echo "$rest" | tr -d '\r')
+    export "${key}=${value}"
+  done < "$ENV_FILE"
+fi
+
 if [ -z "$SLACK_WEBHOOK_URL" ]; then
   exit 0
 fi
 
 INPUT=$(cat)
 
-# Python으로 JSON 파싱
-NOTIFICATION_TYPE=$(echo "$INPUT" | python3 -c "
-import sys, json
+# Python으로 파싱 및 Slack 전송을 한 번에 처리
+RESULT=$(echo "$INPUT" | python -c "
+import sys, json, urllib.request, urllib.error, os
+
+raw = sys.stdin.read()
 try:
-  d = json.load(sys.stdin)
-  print(d.get('notification_type', 'unknown'))
+    d = json.loads(raw)
 except:
-  print('unknown')
-" 2>/dev/null)
+    sys.exit(0)
 
-[ "$NOTIFICATION_TYPE" != "permission_prompt" ] && exit 0
+if d.get('notification_type') != 'permission_prompt':
+    sys.exit(0)
 
-MESSAGE=$(echo "$INPUT" | python3 -c "
-import sys, json
-try:
-  d = json.load(sys.stdin)
-  print(d.get('message', '내용 없음'))
-except:
-  print('내용 없음')
-" 2>/dev/null)
+message = d.get('message', '내용 없음')
+cwd = d.get('cwd', 'unknown')
+project = os.path.basename(cwd)
+webhook_url = os.environ.get('SLACK_WEBHOOK_URL', '')
 
-CWD=$(echo "$INPUT" | python3 -c "
-import sys, json
-try:
-  d = json.load(sys.stdin)
-  print(d.get('cwd', 'unknown'))
-except:
-  print('unknown')
-" 2>/dev/null)
+if not webhook_url:
+    sys.exit(0)
 
-PROJECT_NAME=$(basename "$CWD")
-
-# 환경변수로 Python에 값 전달
-export MSG_MESSAGE="$MESSAGE"
-export MSG_PROJECT="$PROJECT_NAME"
-
-SLACK_PAYLOAD=$(python3 -c "
-import json, os
 payload = {
-    'text': '⚠️ Claude가 권한을 요청합니다',
+    'text': 'Claude가 권한을 요청합니다',
     'blocks': [
         {
             'type': 'header',
-            'text': {'type': 'plain_text', 'text': '⚠️ Claude 권한 요청', 'emoji': True}
+            'text': {'type': 'plain_text', 'text': '🔐 Claude 권한 요청', 'emoji': True}
         },
         {
             'type': 'section',
-            'fields': [
-                {'type': 'mrkdwn', 'text': f'*요청 내용:*\n{os.environ.get(\"MSG_MESSAGE\", \"내용 없음\")}'},
-                {'type': 'mrkdwn', 'text': f'*프로젝트:*\n\`{os.environ.get(\"MSG_PROJECT\", \"unknown\")}\`'}
-            ]
+            'text': {'type': 'mrkdwn', 'text': '*프로젝트*\n\`' + project + '\`'}
+        },
+        {
+            'type': 'section',
+            'text': {'type': 'mrkdwn', 'text': '*요청 내용*\n' + message}
+        },
+        {
+            'type': 'section',
+            'text': {'type': 'mrkdwn', 'text': '*시간*\n' + __import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         }
     ]
 }
-print(json.dumps(payload, ensure_ascii=False))
-" 2>/dev/null)
 
-[ -z "$SLACK_PAYLOAD" ] && exit 0
+data = json.dumps(payload, ensure_ascii=False).encode('utf-8')
+req = urllib.request.Request(webhook_url, data=data, headers={'Content-Type': 'application/json; charset=utf-8'})
+try:
+    urllib.request.urlopen(req, timeout=10)
+    print('ok')
+except Exception as e:
+    print('error:', e)
+" 2>&1)
 
-MSYS_NO_PATHCONV=1 curl -s -X POST \
-  -H "Content-Type: application/json" \
-  -d "$SLACK_PAYLOAD" \
-  "$SLACK_WEBHOOK_URL" \
-  --max-time 10 \
-  -o /dev/null 2>/dev/null
-
+echo "$RESULT" > /dev/null
 exit 0

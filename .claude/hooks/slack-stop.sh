@@ -1,54 +1,55 @@
 #!/usr/bin/env bash
 # Stop 이벤트 → Slack 작업 완료 알림
 
+# .env.local에서 직접 환경변수 읽기
+ENV_FILE="$(dirname "$0")/../.env.local"
+if [ -f "$ENV_FILE" ]; then
+  while IFS='=' read -r key rest; do
+    [[ "$key" =~ ^[[:space:]]*# ]] && continue
+    [[ -z "$key" ]] && continue
+    value=$(echo "$rest" | tr -d '\r')
+    export "${key}=${value}"
+  done < "$ENV_FILE"
+fi
+
 if [ -z "$SLACK_WEBHOOK_URL" ]; then
   exit 0
 fi
 
 INPUT=$(cat)
 
-STOP_HOOK_ACTIVE=$(echo "$INPUT" | python3 -c "
-import sys, json
+# Python으로 파싱 및 Slack 전송을 한 번에 처리
+RESULT=$(echo "$INPUT" | python -c "
+import sys, json, urllib.request, urllib.error, os
+from datetime import datetime
+
+raw = sys.stdin.read()
 try:
-  d = json.load(sys.stdin)
-  print(str(d.get('stop_hook_active', False)).lower())
+    d = json.loads(raw)
 except:
-  print('false')
-" 2>/dev/null)
+    sys.exit(0)
 
 # 무한루프 방지
-[ "$STOP_HOOK_ACTIVE" = "true" ] && exit 0
+if d.get('stop_hook_active'):
+    sys.exit(0)
 
-SESSION_ID=$(echo "$INPUT" | python3 -c "
-import sys, json
-try:
-  d = json.load(sys.stdin)
-  print(d.get('session_id', 'unknown'))
-except:
-  print('unknown')
-" 2>/dev/null)
+session_id = d.get('session_id', 'unknown')
+transcript_path = d.get('transcript_path', '')
+if transcript_path:
+    # 부모 디렉토리명 추출 (인코딩된 경로에서 실제 프로젝트명 복원)
+    parent = os.path.basename(os.path.dirname(transcript_path))
+    # D--workspace-claude-nextjs-starterkit → claude-nextjs-starterkit
+    project = parent.split('--')[-1] if '--' in parent else parent
+else:
+    project = 'unknown'
+completed_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+webhook_url = os.environ.get('SLACK_WEBHOOK_URL', '')
 
-CWD=$(echo "$INPUT" | python3 -c "
-import sys, json
-try:
-  d = json.load(sys.stdin)
-  print(d.get('cwd', 'unknown'))
-except:
-  print('unknown')
-" 2>/dev/null)
+if not webhook_url:
+    sys.exit(0)
 
-PROJECT_NAME=$(basename "$CWD")
-COMPLETED_AT=$(date "+%Y-%m-%d %H:%M:%S")
-
-# 환경변수로 Python에 값 전달 (안전한 방식)
-export MSG_PROJECT="$PROJECT_NAME"
-export MSG_TIME="$COMPLETED_AT"
-export MSG_SESSION="$SESSION_ID"
-
-SLACK_PAYLOAD=$(python3 -c "
-import json, os
 payload = {
-    'text': '✅ Claude 작업이 완료되었습니다',
+    'text': 'Claude 작업이 완료되었습니다',
     'blocks': [
         {
             'type': 'header',
@@ -56,29 +57,23 @@ payload = {
         },
         {
             'type': 'section',
-            'fields': [
-                {'type': 'mrkdwn', 'text': f'*프로젝트:*\n\`{os.environ.get(\"MSG_PROJECT\", \"unknown\")}\`'},
-                {'type': 'mrkdwn', 'text': f'*완료 시각:*\n{os.environ.get(\"MSG_TIME\", \"unknown\")}'}
-            ]
+            'text': {'type': 'mrkdwn', 'text': '*프로젝트*\n\`' + project + '\`'}
         },
         {
-            'type': 'context',
-            'elements': [
-                {'type': 'mrkdwn', 'text': f'Session: \`{os.environ.get(\"MSG_SESSION\", \"unknown\")}\`'}
-            ]
+            'type': 'section',
+            'text': {'type': 'mrkdwn', 'text': '*시간*\n' + completed_at}
         }
     ]
 }
-print(json.dumps(payload, ensure_ascii=False))
-" 2>/dev/null)
 
-[ -z "$SLACK_PAYLOAD" ] && exit 0
+data = json.dumps(payload, ensure_ascii=False).encode('utf-8')
+req = urllib.request.Request(webhook_url, data=data, headers={'Content-Type': 'application/json; charset=utf-8'})
+try:
+    urllib.request.urlopen(req, timeout=10)
+    print('ok')
+except Exception as e:
+    print('error:', e)
+" 2>&1)
 
-MSYS_NO_PATHCONV=1 curl -s -X POST \
-  -H "Content-Type: application/json" \
-  -d "$SLACK_PAYLOAD" \
-  "$SLACK_WEBHOOK_URL" \
-  --max-time 10 \
-  -o /dev/null 2>/dev/null
-
+echo "$RESULT" > /dev/null
 exit 0
